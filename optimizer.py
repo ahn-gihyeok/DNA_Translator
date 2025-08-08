@@ -109,9 +109,15 @@ def aa_to_list(aa_seq):
         return AA_SEQ1
     
 
+#코돈 리스트에 매칭되는 아미노산을 찾고 이를 문자열로 출력
+def codon_translate_aa(codons):
+
+    codons_tr_aa=[]
+
+    for codon in codons:
+        codons_tr_aa.append()
+
+
+
+
 # 아미노산 리스트에 매칭되는 최적의 코돈을 찾고 그 코돈을 리스트에 저장 후 일렬로 이어진 문자열로 변환하여 리턴
-                
-    
-
-        
-
