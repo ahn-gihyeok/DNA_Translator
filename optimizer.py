@@ -77,7 +77,7 @@ set_one=set(three_to_one.values())
 
 
 # aa seq 입력을 개별 aa단위로 나누어 리스트로 저장(3글자의 경우 1글자로 변환하여 리턴)
-# 허용되는 입력 형식: 구분자 없는 1글자(예: MAKWRK...), '-'으로 구분된 3글자(예:Ala-Tyr-Thr-Val...)
+# 허용되는 표준 입력 형식: 구분자 없는 1글자(예: MAKWRK...), '-'으로 구분된 3글자(예:Ala-Tyr-Thr-Val...)
 # 표준 형식에 맞지 않는 입력(예:TYATyrLys,Tyr-His-Y-W, 등) 혹은 잘못된 아미노산(예: Tya,X,BAD)이 입력되면 오류
 def aa_to_list(aa_seq):
     if not isinstance(aa_seq,str):
@@ -115,9 +115,40 @@ def codon_translate_aa(codons):
     codons_tr_aa=[]
 
     for codon in codons:
-        codons_tr_aa.append()
+        if codon in codon_to_aa:
+            codons_tr_aa.append(codon_to_aa[codon])
+        else:
+            raise ValueError(f"'{codon}'은(는) 유효하지 않은 코돈입니다.")
 
+    return "".join(codons_tr_aa) 
 
+# csv 파일 처리
+import csv
+
+def read_usage(usage_csv:str) -> dict:
+
+    codon_frequency={}
+    try:
+        with open(usage_csv, mode='r', encoding='utf-8') as usage:
+            read_usage=csv.reader(usage)
+            next(read_usage) 
+            for row in read_usage: 
+                codon=row[0]
+                frequency=float(row[2])
+                codon_frequency[codon]=frequency
+
+    except FileNotFoundError:
+        raise FileNotFoundError(f"파일 '{usage_csv}'을 찾을 수 없습니다.")
+    
+    except ValueError:
+        raise ValueError(f"파일 '{usage_csv}'의 데이터 형식이 올바르지 않습니다.")
+    
+    except Exception as e:
+        raise Exception(f"파일 '{usage_csv}'를 읽는 도중 문제가 발생하였습니다.")
+    
+    return codon_frequency
+        
 
 
 # 아미노산 리스트에 매칭되는 최적의 코돈을 찾고 그 코돈을 리스트에 저장 후 일렬로 이어진 문자열로 변환하여 리턴
+def aa_reverse_codon(AA):
