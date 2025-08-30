@@ -125,7 +125,7 @@ def codon_translate_aa(codons):
 
     return "".join(codons_tr_aa) 
 
-# csv 파일 처리
+# csv 파일 처리(codon:frequency 딕셔너리로 변환)
 import csv
 
 def read_usage(usage_csv:str) -> dict:
