@@ -83,7 +83,10 @@ def aa_to_list(aa_seq):
     if not isinstance(aa_seq,str):
         raise TypeError('입력은 문자열이여야 합니다.')
     
-    AA_SEQ=aa_seq.upper().replace('\n','').replace(' ','').replace(',','')
+    AA_SEQ=aa_seq.strip().upper()
+
+    if ' ' in AA_SEQ or ',' in AA_SEQ:
+        raise ValueError('표준 형식에 맞지 않습니다.(중간 공백/쉼표 감지)')
 
     if '-' in AA_SEQ:
 
@@ -151,4 +154,24 @@ def read_usage(usage_csv:str) -> dict:
 
 
 # 아미노산 리스트에 매칭되는 최적의 코돈을 찾고 그 코돈을 리스트에 저장 후 일렬로 이어진 문자열로 변환하여 리턴
-def aa_reverse_codon(AA):
+def aa_reverse_codon(AAs, codon_frequency):
+    AA_to_codons=[]
+    for AA in AAs:
+        codon_list=aa_to_codon[AA]
+
+        frequency=codon_frequency[codon_list[0]]
+        codon=codon_list[0]
+
+        for i in range(len(codon_list)):
+
+            if frequency >= codon_frequency[codon_list[i]]:
+                pass
+
+            else:
+                frequency=codon_frequency[codon_list[i]]
+                codon=codon_list[i]
+
+        AA_to_codons.append(codon)
+
+    codon_seq="".join(AA_to_codons)
+    return codon_seq
